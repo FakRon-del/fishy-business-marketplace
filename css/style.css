@@ -1,0 +1,291 @@
+body{
+font-family: 'Poppins', sans-serif;
+background: linear-gradient(to bottom,#6dd5fa,#2980b9);
+margin:0;
+color:#033;
+}
+/* Header */
+
+h1{
+color:white;
+padding:20px;
+}
+
+/* Navigation links */
+
+a{
+text-decoration:none;
+color:#014f6e;
+font-weight:bold;
+}
+
+a:hover{
+color:#022b3a;
+}
+
+/* Product grid */
+
+.products{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+padding:20px;
+}
+
+/* Product cards */
+
+.product-card{
+background:white;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+padding:15px;
+width:220px;
+transition:0.2s;
+}
+
+.product-card:hover{
+transform:translateY(-5px);
+}
+
+.product-card img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:8px;
+}
+
+/* Shop label */
+
+.shop{
+font-size:14px;
+color:#0077b6;
+}
+
+/* Price */
+
+.price{
+color:#0096c7;
+font-weight:bold;
+font-size:18px;
+}
+
+/* Buttons */
+
+.btn{
+background:#0077b6;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.btn:hover{
+background:#023e8a;
+}
+
+/* Dashboard cards */
+
+.dashboard{
+display:flex;
+justify-content:center;
+gap:20px;
+margin:20px;
+flex-wrap:wrap;
+}
+
+.stat-card{
+background:white;
+padding:20px;
+border-radius:10px;
+width:180px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Navbar */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#0077b6;
+padding:15px 40px;
+color:white;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+}
+
+.nav-links a{
+color:white;
+margin-left:20px;
+font-weight:500;
+}
+
+.nav-links a:hover{
+color:#caf0f8;
+}
+/* Hero section */
+
+/* HERO SECTION */
+
+.hero{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+height:80vh;
+color:white;
+padding:20px;
+}
+
+/* Hero Title */
+
+.hero h1{
+font-size:48px;
+margin-bottom:10px;
+}
+
+/* Description */
+
+.hero p{
+font-size:20px;
+max-width:600px;
+margin-bottom:25px;
+}
+
+/* Button */
+
+.btn{
+background:#00b4d8;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+font-weight:600;
+text-decoration:none;
+transition:0.2s;
+}
+
+.btn:hover{
+background:#0077b6;
+}
+/* Form design */
+
+.form-container{
+background:white;
+width:300px;
+margin:120px auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+.form-container input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+.form-container button{
+width:100%;
+}
+
+table{
+width:80%;
+margin:auto;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+th{
+background:#0077b6;
+color:white;
+padding:12px;
+}
+
+td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+tr:hover{
+background:#f1f9ff;
+}
+.fish{
+position:fixed;
+bottom:40px;
+left:-150px;
+width:100px;
+animation:swim 25s linear infinite;
+opacity:0.8;
+}
+
+@keyframes swim{
+0%{
+left:-150px;
+transform:scaleX(1);
+}
+
+50%{
+transform:scaleX(1);
+}
+
+100%{
+left:110%;
+transform:scaleX(1);
+}
+}
+
+.checkout-box{
+background:white;
+width:400px;
+margin:120px auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+.checkout-box h1{
+color:#0077b6;
+margin-bottom:10px;
+}
+
+.checkout-box p{
+font-size:18px;
+margin:8px 0;
+}
+
+.cancel-btn{
+background:#e63946;
+color:white;
+padding:8px 14px;
+border-radius:6px;
+text-decoration:none;
+margin-top:10px;
+display:inline-block;
+}
+
+.cancel-btn:hover{
+background:#c1121f;
+}
+
+.status-placed{
+color:green;
+font-weight:bold;
+}
+
+.status-cancelled{
+color:red;
+font-weight:bold;
+}
