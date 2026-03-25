@@ -3,74 +3,89 @@ session_start();
 include("../config/db.php");
 
 if(!isset($_SESSION['user_id'])){
-header("Location: ../auth/login.php");
-exit();
+    header("Location: ../auth/login.php");
+    exit();
 }
 
 $user_id = $_SESSION['user_id'];
 
-if(!isset($_SESSION['cart']) || count($_SESSION['cart']) == 0){
-echo "Cart is empty";
-exit();
+# Get cart
+$cart = $conn->query("SELECT * FROM carts WHERE user_id=$user_id")->fetch_assoc();
+
+if(!$cart){
+    die("No cart found");
 }
+
+$cart_id = $cart['id'];
+
+# Get cart items WITH STOCK
+$items = $conn->query("
+SELECT cart_items.*, products.price, products.stock, products.name
+FROM cart_items
+JOIN products ON cart_items.product_id = products.id
+WHERE cart_items.cart_id = $cart_id
+");
 
 $total = 0;
+$hasItems = false;
 
-foreach($_SESSION['cart'] as $id => $qty){
+# ✅ FIRST PASS: CHECK STOCK
+while($row = $items->fetch_assoc()){
+    $hasItems = true;
 
-$product = $conn->query("SELECT * FROM products WHERE id=$id")->fetch_assoc();
+    if($row['stock'] < $row['quantity']){
+        die("❌ Not enough stock for: " . $row['name']);
+    }
 
-$total += $product['price'] * $qty;
-
+    $total += $row['price'] * $row['quantity'];
 }
 
-$conn->query("INSERT INTO orders (user_id,total) VALUES ('$user_id','$total')");
+if(!$hasItems){
+    die("Cart is empty");
+}
+
+# ✅ CREATE ORDER
+$conn->query("
+INSERT INTO orders (user_id,total,status)
+VALUES ($user_id,$total,'placed')
+");
 
 $order_id = $conn->insert_id;
 
-foreach($_SESSION['cart'] as $id => $qty){
-
-$product = $conn->query("SELECT * FROM products WHERE id=$id")->fetch_assoc();
-
-$conn->query("
-INSERT INTO order_items (order_id,product_id,quantity,price)
-VALUES ('$order_id','$id','$qty','".$product['price']."')
+# 🔁 RE-GET ITEMS (important after fetch loop)
+$items = $conn->query("
+SELECT cart_items.*, products.price, products.stock
+FROM cart_items
+JOIN products ON cart_items.product_id = products.id
+WHERE cart_items.cart_id = $cart_id
 ");
 
+# ✅ SECOND PASS: INSERT + DEDUCT STOCK
+while($row = $items->fetch_assoc()){
+
+    $product_id = $row['product_id'];
+    $qty = $row['quantity'];
+    $price = $row['price'];
+
+    # Insert order item
+    $conn->query("
+    INSERT INTO order_items (order_id,product_id,quantity,price)
+    VALUES ($order_id,$product_id,$qty,$price)
+    ");
+
+    # 🔥 DEDUCT STOCK
+    $conn->query("
+    UPDATE products 
+    SET stock = stock - $qty 
+    WHERE id = $product_id
+    ");
 }
 
-unset($_SESSION['cart']);
+# ✅ CLEAR CART
+$conn->query("DELETE FROM cart_items WHERE cart_id=$cart_id");
+
+$_SESSION['message'] = "✅ Order placed successfully!";
+
+header("Location: ../my_orders.php");
+exit();
 ?>
-
-<link rel="stylesheet" href="../css/style.css">
-
-<div class="navbar">
-
-<h2 class="logo">🐟 Fishy Business</h2>
-
-<div class="nav-links">
-<a href="../products.php">Browse Fish</a>
-<a href="../my_orders.php">My Orders</a>
-<a href="../auth/logout.php">Logout</a>
-</div>
-
-</div>
-
-
-<div class="checkout-box">
-
-<h1>🎉 Order Placed Successfully!</h1>
-
-<p>Your order has been placed.</p>
-
-<p><b>Order Number:</b> #<?php echo $order_id; ?></p>
-
-<p><b>Total Paid:</b> ₱<?php echo $total; ?></p>
-
-<br>
-
-<a href="../products.php" class="btn">Continue Shopping</a>
-
-<a href="../my_orders.php" class="btn">View My Orders</a>
-
-</div>

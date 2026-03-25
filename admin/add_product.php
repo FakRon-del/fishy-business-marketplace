@@ -8,8 +8,7 @@ $name = $_POST['name'];
 $description = $_POST['description'];
 $price = $_POST['price'];
 $stock = $_POST['stock'];
-$shop_id = $_POST['shop_id'];
-
+$shop_id = $_SESSION['shop_id'];
 $image = $_FILES['image']['name'];
 
 move_uploaded_file($_FILES['image']['tmp_name'], "../images/".$image);
@@ -40,8 +39,9 @@ Stock:<br>
 <input type="number" name="stock"><br><br>
 
 Shop:<br>
-<select name="shop_id">
-
+<?php
+$shop_id = $_SESSION['shop_id'];
+?>
 <?php
 
 $shops = $conn->query("SELECT * FROM shops");

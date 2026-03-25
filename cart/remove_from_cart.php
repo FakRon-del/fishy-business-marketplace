@@ -1,12 +1,9 @@
 <?php
-session_start();
+include("../config/db.php");
 
 $id = $_GET['id'];
 
-if(isset($_SESSION['cart'][$id])){
-    unset($_SESSION['cart'][$id]);
-}
+$conn->query("DELETE FROM cart_items WHERE id=$id");
 
 header("Location: view_cart.php");
-exit();
 ?>

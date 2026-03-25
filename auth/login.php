@@ -17,11 +17,26 @@ if($result->num_rows > 0){
 $user = $result->fetch_assoc();
 
 if(password_verify($password,$user['password'])){
+    if($user['status'] == 'banned'){
+        echo "<h2 style='color:red;'>🚫 Your account has been banned.</h2>";
+        echo "<p>Please contact the administrator.</p>";
+        exit();
+    }
 
-$_SESSION['user_id']=$user['id'];
 
-header("Location: ../index.php");
-exit();
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['role'] = $user['role'];
+$_SESSION['shop_id'] = $user['shop_id'];
+
+if($user['role'] == 'super_admin'){
+    header("Location: ../admin/dashboard.php");
+}
+elseif($user['role'] == 'shop_admin'){
+    header("Location: ../admin/shop_dashboard.php");
+}
+else{
+    header("Location: ../index.php");
+}
 
 }else{
 echo "Incorrect password";
@@ -31,7 +46,9 @@ echo "Incorrect password";
 echo "User not found";
 }
 
+exit();
 }
+
 ?>
 <link rel="stylesheet" href="../css/style.css">
 
